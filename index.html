@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Plantonista 5.0</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="icon-btn" id="desktop-sidebar-toggle" title="Recolher menu">
+                <span class="material-symbols-outlined">menu_open</span>
+            </button>
+        </div>
+
+        <div class="new-chat-container">
+            <button class="new-chat-btn" id="btn-new-chat">
+                <span class="material-symbols-outlined">add</span>
+                <span class="text">Nova conversa</span>
+            </button>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="section-title">Gems</h3>
+            <ul class="nav-list">
+                <li class="nav-item active" data-tool="prontuario">
+                    <span class="material-symbols-outlined">clinical_notes</span>
+                    <span class="text">SuGa PRONTUÁRIO</span>
+                </li>
+                <li class="nav-item" data-tool="examinator">
+                    <span class="material-symbols-outlined">description</span>
+                    <span class="text">SuGa EXAMINATOR</span>
+                </li>
+                <li class="nav-item" data-tool="brainstorm">
+                    <span class="material-symbols-outlined">psychology</span>
+                    <span class="text">SuGa BRAINSTORM</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="nav-item" id="userMenuButton">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="text">Configurações</span>
+            </button>
+            <div class="location-info">
+                Fortaleza, CE
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="logo-area">
+                <button class="icon-btn mobile-menu-btn" id="mobile-menu-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <span class="app-name" id="main-title">SuGa PRONTUÁRIO</span>
+            </div>
+            <div class="user-area">
+                <div class="badge-pro">PRO</div>
+                <div class="user-avatar-img">
+                    <div class="avatar-placeholder">AE</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="chat-history" id="chat-history">
+            <div class="welcome-screen" id="welcome-screen">
+                <div class="gemini-icon">
+                    <svg width="50" height="50" viewBox="0 0 40 40" fill="none">
+                        <path d="M10 20C10 14.4772 14.4772 10 20 10C25.5228 10 30 14.4772 30 20C30 25.5228 25.5228 30 20 30C14.4772 30 10 25.5228 10 20Z" fill="url(#paint0_linear)"/>
+                        <defs>
+                            <linearGradient id="paint0_linear" x1="10" y1="10" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#4285F4"/>
+                                <stop offset="1" stop-color="#DB4437"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1>Como posso ajudar no seu plantão hoje?</h1>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div id="file-list-container" class="file-list-container" style="display: none;">
+                </div>
+
+            <div class="prompt-bar">
+                <input type="file" id="hidden-file-input" multiple style="display: none;">
+                
+                <button class="icon-btn-bar" id="btn-attachment" title="Anexar arquivos (Max 10)">
+                    <span class="material-symbols-outlined">add_circle</span>
+                </button>
+
+                <textarea id="chat-input" placeholder="Digite aqui ou anexe até 10 arquivos..." rows="1"></textarea>
+
+                <button class="icon-btn-bar" id="btn-mic" title="Gravar Áudio">
+                    <span class="material-symbols-outlined">mic</span>
+                </button>
+                
+                <button class="icon-btn-bar send-btn" id="btn-send">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </div>
+            <p class="disclaimer">O Plantonista 5.0 pode cometer erros. Verifique sempre as informações clínicas.</p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
