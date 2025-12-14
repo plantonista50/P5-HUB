@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- CONFIGURAÇÃO ---
     // Mude USE_REAL_BACKEND para true quando quiser conectar de verdade
-    const USE_REAL_BACKEND = false; 
+    const USE_REAL_BACKEND = true; 
     
     const AUTH_WEBHOOK = "https://n8n-n8n-start.zvu2si.easypanel.host/webhook/suga-auth"; 
 
@@ -431,3 +431,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
