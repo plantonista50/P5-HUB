@@ -247,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let filesHtml = selectedFiles.map(f => `<div style="font-size:0.8rem;color:#a8c7fa"><span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">attachment</span> ${f.name}</div>`).join('');
         const modeLabel = isLinkedToPatient ? "" : " <span style='opacity:0.6; font-size:0.7em;'>(Modo Livre)</span>";
         
-        // --- QUEBRA DE LINHA PARA USUÁRIO ---
         let userHtml = `<div style="font-size:0.7rem;color:#666">[${TOOLS[currentTool].title.replace("SuGa ","")}]${modeLabel}</div>${filesHtml}<div>${text.replace(/\n/g,'<br>')}</div>`;
         
         addUserMessage(userHtml);
@@ -318,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatHistory.appendChild(div);
     }
 
-    // --- FUNÇÃO MODIFICADA: ADICIONA O BOTÃO DE COPIAR ---
+    // --- FUNÇÃO ATUALIZADA: TEXTO EDITÁVEL ---
     function addAiMessage(text) {
         const div = document.createElement('div'); div.className = 'message-wrapper ai';
         div.innerHTML = `
@@ -326,28 +325,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="material-symbols-outlined">smart_toy</span>
             </div>
             <div class="message-content">
-                <button class="copy-btn" onclick="copyText(this)" title="Copiar Prontuário">
-                    <span class="material-symbols-outlined">content_copy</span>
-                </button>
-                <pre>${text}</pre>
+                <div class="message-header">
+                    <span class="msg-label">
+                        <span class="material-symbols-outlined" style="font-size:1rem;">description</span>
+                        Resultado
+                    </span>
+                    <button class="copy-btn" onclick="copyText(this)" title="Copiar">
+                        <span class="material-symbols-outlined">content_copy</span>
+                        Copiar
+                    </button>
+                </div>
+                <pre contenteditable="true" spellcheck="false">${text}</pre>
             </div>`;
         chatHistory.appendChild(div);
     }
 
-    // --- NOVA FUNÇÃO GLOBAL DE COPIAR ---
+    // --- FUNÇÃO DE CÓPIA GLOBAL ---
     window.copyText = function(btn) {
-        const pre = btn.parentElement.querySelector('pre');
+        const contentDiv = btn.closest('.message-content');
+        const pre = contentDiv.querySelector('pre');
         
         if (pre) {
             navigator.clipboard.writeText(pre.innerText).then(() => {
                 const icon = btn.querySelector('span');
-                const originalIcon = icon.innerText;
                 
                 icon.innerText = 'check'; 
-                btn.style.color = '#4caf50';
+                btn.style.color = '#4caf50'; 
                 
                 setTimeout(() => {
-                    icon.innerText = originalIcon;
+                    icon.innerText = 'content_copy';
                     btn.style.color = ''; 
                 }, 2000);
             }).catch(err => {
