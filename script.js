@@ -11,9 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let isRecording = false;
 
     // --- CONFIGURAÇÃO ---
-    // Mude USE_REAL_BACKEND para true quando quiser conectar de verdade
+    // Mude USE_REAL_BACKEND para true para conectar ao Supabase via n8n
     const USE_REAL_BACKEND = true; 
     
+    // VERIFIQUE SE ESTA URL É A DO SEU N8N
     const AUTH_WEBHOOK = "https://n8n-n8n-start.zvu2si.easypanel.host/webhook/suga-auth"; 
 
     const TOOLS = {
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const forgotStep1 = document.getElementById('forgot-step-1');
     const forgotStep2 = document.getElementById('forgot-step-2');
 
-    // --- AUTH LOGIC ---
+    // --- AUTH LOGIC: LOGIN ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
@@ -107,6 +108,103 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- AUTH LOGIC: CADASTRO (SIGNUP) ---
+    signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('signup-email').value;
+        const pass = document.getElementById('signup-pass').value;
+        const confirm = document.getElementById('signup-confirm').value;
+        const btn = signupForm.querySelector('button');
+        const originalText = btn.textContent;
+
+        if (pass !== confirm) {
+            alert("As senhas não coincidem.");
+            return;
+        }
+
+        btn.textContent = "Cadastrando...";
+        btn.disabled = true;
+
+        if (USE_REAL_BACKEND) {
+            try {
+                const response = await fetch(AUTH_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: 'signup', // Define a rota no Switch do n8n
+                        email: email, 
+                        password: pass 
+                    })
+                });
+
+                let data = await response.json();
+                if (Array.isArray(data)) data = data[0];
+
+                if (data.user || !data.error) {
+                    alert("Cadastro realizado! Faça login com suas credenciais.");
+                    signupModal.style.display = 'none';
+                    signupForm.reset();
+                } else {
+                    alert("Erro ao cadastrar: " + (data.msg || data.message || JSON.stringify(data)));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erro de conexão ao tentar cadastrar.");
+            }
+        } else {
+            setTimeout(() => {
+                alert("Simulação: Cadastro realizado!");
+                signupModal.style.display = 'none';
+            }, 1000);
+        }
+
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
+
+    // --- AUTH LOGIC: ESQUECI A SENHA ---
+    forgotStep1.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('forgot-email').value;
+        const btn = forgotStep1.querySelector('button');
+        const originalText = btn.textContent;
+
+        btn.textContent = "Enviando...";
+        btn.disabled = true;
+
+        if (USE_REAL_BACKEND) {
+            try {
+                const response = await fetch(AUTH_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: 'forgot', // Define a rota no Switch do n8n
+                        email: email 
+                    })
+                });
+                
+                // O endpoint de recover do Supabase geralmente retorna vazio ou sucesso simples
+                alert("Se o e-mail existir, você receberá um link de redefinição.");
+                forgotModal.style.display = 'none';
+                forgotStep1.reset();
+                
+            } catch (error) {
+                console.error(error);
+                alert("Erro de conexão.");
+            }
+        } else {
+             setTimeout(() => {
+                alert("Simulação: E-mail de recuperação enviado.");
+                forgotModal.style.display = 'none';
+            }, 1000);
+        }
+        
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
+
+    // --- MODAL CONTROLS ---
     linkSignup.addEventListener('click', (e) => { e.preventDefault(); signupModal.style.display = 'flex'; });
     linkForgot.addEventListener('click', (e) => { e.preventDefault(); forgotModal.style.display = 'flex'; });
 
@@ -431,4 +529,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
